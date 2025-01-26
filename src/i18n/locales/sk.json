@@ -24,7 +24,8 @@
       "startLogging": "Spustiť Logovanie",
       "stopLogging": "Ukončiť Logovanie",
       "downloadLogs": "Stiahniť Logy",
-      "loggingDescription": "Pripojte Vaše zariadenie, uložte serialové dáta a stiahnite ich neskôr."
+      "loggingDescription": "Pripojte Vaše zariadenie, uložte serialové dáta a stiahnite ich neskôr.",
+      "keepConfig": "Zachovať konfiguráciu"
     },
     "features": {
       "title": "Kľučové Funkcie",
@@ -64,7 +65,8 @@
       "flashing": "Aktualizujem: {{percent}}% dokončené",
       "completed": "Aktualizácia ukončená. Reštartujte Vaše zariadenie...",
       "success": "Aktualizácia úspešne ukončená! Zariadenie bolo reštartované.",
-      "loggingStarted": "Seriálove logovanie bolo spustené..."
+      "loggingStarted": "Seriálove logovanie bolo spustené...",
+      "downloadFirmware": "Firmware sa sťahuje a overuje sa jeho integrita..."
     },
     "errors": {
       "browserCompatibility": {

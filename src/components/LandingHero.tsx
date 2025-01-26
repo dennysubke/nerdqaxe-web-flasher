@@ -16,8 +16,8 @@ import '@xterm/xterm/css/xterm.css';
 export default function LandingHero() {
   const { t } = useTranslation();
   const [selectedDevice, setSelectedDevice] = useState<string>('')
-  const [selectedBoardVersion, setSelectedBoardVersion] = useState('')
   const [selectedFirmware, setSelectedFirmware] = useState('')
+  const [firmwareOptions, setFirmwareOptions] = useState<any[]>([]);
   const [status, setStatus] = useState('')
   const [isConnecting, setIsConnecting] = useState(false)
   const [isConnected, setIsConnected] = useState(false)
@@ -32,6 +32,7 @@ export default function LandingHero() {
   const textDecoderRef = useRef<TextDecoderStream | null>(null)
   const readableStreamClosedRef = useRef<Promise<void> | null>(null)
   const logsRef = useRef<string>('')
+  const [keepConfig, setKeepConfig] = useState(false);
 
   useEffect(() => {
     const userAgent = navigator.userAgent.toLowerCase();
@@ -66,13 +67,96 @@ export default function LandingHero() {
   const devices = device_data.devices;
   const device = selectedDevice !== ''
     ? devices.find(d => d.name == selectedDevice)!
-    : { boards: [] };
-  const board = selectedBoardVersion !== ''
-    ? device.boards.find(b => b.name == selectedBoardVersion)!
-    : { supported_firmware: [] };
-  const firmware = selectedFirmware !== ''
-    ? board.supported_firmware.find(f => f.version == selectedFirmware)!
-    : { path: '' };
+    : { "name": "", "repository": "", "file": ""};
+
+  // Helper function to extract GitHub repository details
+  const parseGitHubRepo = (repositoryUrl: string) => {
+    const repoMatch = repositoryUrl.match(/github\.com\/([^/]+)\/([^/]+)/);
+    if (!repoMatch) throw new Error('Invalid repository URL');
+    const [_, owner, repo] = repoMatch;
+    return { owner, repo };
+  };
+
+  // Helper function to fetch data from GitHub API
+  const fetchGitHubAPI = async (url: string) => {
+    const response = await fetch(url);
+    if (!response.ok) throw new Error(`GitHub API returned ${response.status}`);
+    return response.json();
+  };
+
+  // Extract the SHA256 hash from the release notes
+  const extractSHA256Hash = (releaseBody: string, binaryName: string) => {
+    //console.log(releaseBody);
+    //console.log(binaryName);
+    const lines = (releaseBody || '').split('\n');
+    for (const line of lines) {
+      if (line.includes(binaryName)) {
+        const parts = line.split(/\s+/);
+        if (parts.length > 1 && parts[1] === binaryName) {
+          return parts[0]; // Return the first part as the hash
+        }
+      }
+    }
+    return null;
+  };
+
+  const calculateSHA256 = async (data) => {
+    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+    return Array.from(new Uint8Array(hashBuffer))
+      .map((byte) => byte.toString(16).padStart(2, '0'))
+      .join('');
+  };
+
+  // Fetch the SHA256 hash for a specific binary
+  const fetchSHA256Hash = async (repositoryUrl: string, versionTag: string, binaryName: string) => {
+    try {
+      const { owner, repo } = parseGitHubRepo(repositoryUrl);
+      const apiUrl = `https://api.github.com/repos/${owner}/${repo}/releases/tags/${versionTag}`;
+      const release = await fetchGitHubAPI(apiUrl);
+      return extractSHA256Hash(release.body, binaryName);
+    } catch (error) {
+      console.error('Error fetching SHA256 hash:', error);
+      return null;
+    }
+  };
+
+  // Fetch filtered releases from GitHub
+  const fetchReleases = async (repositoryUrl: string, selectedDevice: string) => {
+    try {
+      const { owner, repo } = parseGitHubRepo(repositoryUrl);
+      const apiUrl = `https://api.github.com/repos/${owner}/${repo}/releases`;
+      const releases = await fetchGitHubAPI(apiUrl);
+
+      const filteredReleases = releases.filter((release: any) => !release.prerelease && !release.draft);
+      return filteredReleases.map((release: any) => ({
+        version: release.tag_name,
+        name: release.name,
+        assets: release.assets.filter((asset: any) =>
+          asset.name.startsWith(`esp-miner-factory-${selectedDevice}-${release.tag_name}`),
+        ),
+      })).filter((release: any) => release.assets.length > 0);
+    } catch (error) {
+      console.error('Error fetching releases:', error);
+      return [];
+    }
+  };
+
+  useEffect(() => {
+    const updateFirmwareOptions = async () => {
+      if (!selectedDevice) {
+        setFirmwareOptions([]);
+        return;
+      }
+
+      const device = device_data.devices.find((d) => d.name === selectedDevice);
+      if (device) {
+        const firmwareData = await fetchReleases(device.repository, device.file);
+        setFirmwareOptions(firmwareData);
+      }
+    };
+
+    updateFirmwareOptions();
+  }, [selectedDevice]);
 
   const handleConnect = async () => {
     setIsConnecting(true)
@@ -115,6 +199,10 @@ export default function LandingHero() {
       setStatus(`${t('status.disconnectError')}: ${error instanceof Error ? error.message : String(error)}`);
     }
   }
+
+  const handleKeepConfigToggle = (event) => {
+    setKeepConfig(event.target.checked);
+  };
 
   const startSerialLogging = async () => {
     if (!serialPortRef.current) {
@@ -203,13 +291,19 @@ export default function LandingHero() {
       return
     }
 
-    if (!selectedDevice || !selectedBoardVersion) {
-      setStatus(t('status.selectBoth'))
-      return
+    if (!selectedFirmware) {
+      setStatus(t('status.selectFirmware'));
+      return;
+    }
+
+    const firmwareData = firmwareOptions.find(f => f.version === selectedFirmware);
+    if (!firmwareData || firmwareData.assets.length === 0) {
+      setStatus(t('status.firmwareNotFound'));
+      return;
     }
 
     setIsFlashing(true)
-    setStatus(t('status.preparing'))
+
 
     try {
       // Stop logging if it's active
@@ -221,6 +315,7 @@ export default function LandingHero() {
       if (serialPortRef.current.readable) {
         await serialPortRef.current.close();
       }
+      setStatus(t('status.preparing'));
 
       // Create transport and ESPLoader for flashing
       const transport = new Transport(serialPortRef.current);
@@ -241,26 +336,78 @@ export default function LandingHero() {
 
       await loader.main();
 
-      if (!firmware) {
-        throw new Error('No firmware available for the selected device and board version')
+      // Fetch the SHA256 hash for the selected binary
+      const firmwareUrl = firmwareData.assets[0].browser_download_url;
+      const binaryName = decodeURIComponent(firmwareUrl.split('/').pop()); // Extract the binary name
+      const sha256Hash = await fetchSHA256Hash(device.repository, selectedFirmware, binaryName);
+
+      if (sha256Hash) {
+        console.log(`found sha256 hash: ${sha256Hash}`);
+      } else {
+        console.log('no sha256 hash found');
       }
 
-      const firmwareResponse = await fetch(firmware.path)
+      setStatus(t('status.downloadFirmware'));
+
+      // hard-coded, let's see how it goes :see-no-evil:
+      const proxyUrl = 'https://corsproxy.io/?url=';
+      const firmwareResponse = await fetch(proxyUrl + firmwareUrl);
       if (!firmwareResponse.ok) {
-        throw new Error('Failed to load firmware file')
+        throw new Error('Failed to download firmware');
+      }
+      const firmwareArrayBuffer = await firmwareResponse.arrayBuffer();
+
+      // Compare the calculated hash with the fetched hash
+      if (sha256Hash) {
+      // Calculate the SHA256 hash of the downloaded binary
+        const calculatedHash = await calculateSHA256(firmwareArrayBuffer);
+        console.log(`Calculated SHA256 hash of downloaded binary: ${calculatedHash}`);
+
+        if (calculatedHash === sha256Hash) {
+          console.log('SHA256 hash verification successful. Binary is valid.');
+        } else {
+          console.error('SHA256 hash verification failed! Binary may be corrupted or tampered with.');
+          throw new Error('Hash verification failed');
+        }
+      } else {
+        console.warn("no SHA256 found on the release page!");
       }
 
-      const firmwareArrayBuffer = await firmwareResponse.arrayBuffer()
-      const firmwareUint8Array = new Uint8Array(firmwareArrayBuffer)
-      const firmwareBinaryString = Array.from(firmwareUint8Array, (byte) => String.fromCharCode(byte)).join('')
+      const firmwareUint8Array = new Uint8Array(firmwareArrayBuffer);
+      const firmwareBinaryString = Array.from(firmwareUint8Array, (byte) =>
+        String.fromCharCode(byte)
+      ).join('');
 
-      setStatus(t('status.flashing', { percent: 0 }))
+      setStatus(t('status.flashing', { percent: 0 }));
+
+      // On all Bitaxe derivatives the same
+      const nvsStart = 0x9000;
+      const nvsSize = 0x6000;
+
+      let parts;
+
+      if (keepConfig) {
+        parts = [
+          {
+            data: firmwareBinaryString.slice(0, nvsStart), // Data before NVS
+            address: 0,
+          },
+          {
+            data: firmwareBinaryString.slice(nvsStart + nvsSize), // Data after NVS
+            address: nvsStart + nvsSize,
+          },
+        ];
+      } else {
+        parts = [
+          {
+            data: firmwareBinaryString, // Entire firmware binary
+            address: 0,
+          },
+        ];
+      }
 
       await loader.writeFlash({
-        fileArray: [{
-          data: firmwareBinaryString,
-          address: 0
-        }],
+        fileArray: parts,
         flashSize: "keep",
         flashMode: "keep",
         flashFreq: "keep",
@@ -327,37 +474,33 @@ export default function LandingHero() {
               </Button>
               <Selector
                 placeholder={t('hero.selectDevice')}
-                values={devices.map(d => d.name)}
-                onValueChange={(value) => {
-                  setSelectedDevice(value)
-                  setSelectedBoardVersion('')
-                  setSelectedFirmware('')
-                }}
-                disabled={isConnecting || isFlashing || !isConnected}
+                values={device_data.devices.map((d) => d.name)}
+                onValueChange={setSelectedDevice}
               />
               {selectedDevice && (
                 <Selector
-                  placeholder={t('hero.selectBoard')}
-                  values={device.boards.map(b => b.name)}
-                  onValueChange={(value) => {
-                    setSelectedBoardVersion(value)
-                    setSelectedFirmware('')
-                  }}
-                  disabled={isConnecting || isFlashing}
-                />
-              )}
-              {selectedBoardVersion && (
-                <Selector
                   placeholder={t('hero.selectFirmware')}
-                  values={board.supported_firmware.map(f => f.version)}
+                  values={firmwareOptions.map((f) => f.version)}
                   onValueChange={setSelectedFirmware}
                   disabled={isConnecting || isFlashing}
                 />
               )}
+              <div className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  id="keepConfig"
+                  className="cursor-pointer"
+                  checked={keepConfig}
+                  onChange={handleKeepConfigToggle}
+                />
+                <label htmlFor="keepConfig" className="text-gray-500 dark:text-gray-400 cursor-pointer">
+                  {t('hero.keepConfig')}
+                </label>
+              </div>
               <Button
                 className="w-full"
                 onClick={handleStartFlashing}
-                disabled={!selectedDevice || !selectedBoardVersion || isConnecting || isFlashing || !isConnected}
+                disabled={!selectedDevice || isConnecting || isFlashing || !isConnected}
               >
                 {isFlashing ? t('hero.flashing') : t('hero.startFlashing')}
                 <Zap className="ml-2 h-4 w-4" />

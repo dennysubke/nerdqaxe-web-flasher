@@ -24,7 +24,8 @@
       "startLogging": "Start Logging",
       "stopLogging": "Stop Logging",
       "downloadLogs": "Download Logs",
-      "loggingDescription": "Connect your device, log the serial data and download it later on."
+      "loggingDescription": "Connect your device, log the serial data and download it later on.",
+      "keepConfig": "Keep configuration"
     },
     "features": {
       "title": "Key Features",
@@ -64,7 +65,8 @@
       "flashing": "Flashing: {{percent}}% complete",
       "completed": "Flashing completed. Restarting device, please wait...",
       "success": "Flashing completed successfully! Device has been restarted.",
-      "loggingStarted": "Serial logging started..."
+      "loggingStarted": "Serial logging started...",
+      "downloadFirmware": "Downloading firmware and verifying its integrity..."
     },
     "errors": {
       "browserCompatibility": {

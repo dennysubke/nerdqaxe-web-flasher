@@ -24,7 +24,8 @@
         "startLogging": "Avvia registrazione Log",
         "stopLogging": "Ferma registrazione Log",
         "downloadLogs": "Scarica Log",
-        "loggingDescription": "Collega il tuo dispositivo, registra i dati seriali e scaricali successivamente."
+        "loggingDescription": "Collega il tuo dispositivo, registra i dati seriali e scaricali successivamente.",
+        "keepConfig": "Mantieni configurazione"
     },
     "features": {
         "title": "Caratteristiche principali",
@@ -64,7 +65,8 @@
         "flashing": "Flashing: {{percent}}% completato",
         "completed": "Flashing completato. Riavvio del dispositivo...",
         "success": "Flashing completato con successo! Il dispositivo stato riavviato.",
-        "loggingStarted": "Registrazione seriale avviata..."
+        "loggingStarted": "Registrazione seriale avviata...",
+        "downloadFirmware": "Download del firmware e verifica della sua integrità..."
     },
     "errors": {
         "browserCompatibility": {
