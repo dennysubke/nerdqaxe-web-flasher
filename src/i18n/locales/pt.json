@@ -25,7 +25,9 @@
       "stopLogging": "Parar Log",
       "downloadLogs": "Baixar Logs",
       "loggingDescription": "Conecte seu dispositivo, registre os dados seriais e baixe-os posteriormente.",
-      "keepConfig": "Manter configuração"
+      "keepConfig": "Manter configuração",
+      "downloadFirmware": "Baixando o firmware e verificando sua integridade..."
+
     },
     "features": {
       "title": "Principais Recursos",

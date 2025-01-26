@@ -25,7 +25,9 @@
         "stopLogging": "Ferma registrazione Log",
         "downloadLogs": "Scarica Log",
         "loggingDescription": "Collega il tuo dispositivo, registra i dati seriali e scaricali successivamente.",
-        "keepConfig": "Mantieni configurazione"
+        "keepConfig": "Mantieni configurazione",
+        "downloadFirmware": "Download del firmware e verifica della sua integrità..."
+
     },
     "features": {
         "title": "Caratteristiche principali",

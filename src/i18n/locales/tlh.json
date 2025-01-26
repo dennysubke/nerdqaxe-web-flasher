@@ -25,7 +25,9 @@
         "stopLogging": "De' ghoSchoH",
         "downloadLogs": "De' nIH",
         "loggingDescription": "chel jan, ghItlh De', nIH 'ach neH le'vaD.",
-        "keepConfig": "nugh rI' choq"
+        "keepConfig": "nugh rI' choq",
+        "downloadFirmware": "luch chu'lu' 'ej waDlaH Quv net yI'ol..."
+
     },
     "features": {
         "title": "nIvmo' chutmey",

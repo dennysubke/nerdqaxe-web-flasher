@@ -25,7 +25,8 @@
       "stopLogging": "Logging stoppen",
       "downloadLogs": "Logs herunterladen",
       "loggingDescription": "Verbinde dein Gerät, protokolliere die seriellen Daten und lade diese später herunter.",
-      "keepConfig": "Konfiguration behalten"
+      "keepConfig": "Konfiguration behalten",
+      "downloadFirmware": "Firmware wird heruntergeladen und auf Integrität überprüft..."
     },
     "features": {
       "title": "Funktionen",

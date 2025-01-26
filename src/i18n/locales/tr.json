@@ -25,7 +25,9 @@
       "stopLogging": "Loglamayı Durdur",
       "downloadLogs": "Logu İndir",
       "loggingDescription": "Cihazınızı seçin, işlemi loglayın ve daha sonra indirin.",
-      "keepConfig": "Yapılandırmayı koru"
+      "keepConfig": "Yapılandırmayı koru",
+      "downloadFirmware": "Firmware indiriliyor ve bütünlüğü doğrulanıyor..."
+
     },
     "features": {
       "title": "Öne Çıkan Özellikler",
