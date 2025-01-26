@@ -25,8 +25,7 @@
         "stopLogging": "De' ghoSchoH",
         "downloadLogs": "De' nIH",
         "loggingDescription": "chel jan, ghItlh De', nIH 'ach neH le'vaD.",
-        "keepConfig": "nugh rI' choq",
-        "downloadFirmware": "luch chu'lu' 'ej waDlaH Quv net yI'ol..."
+        "keepConfig": "nugh rI' choq"
     },
     "features": {
         "title": "nIvmo' chutmey",
@@ -66,7 +65,8 @@
         "flashing": "ghItlhqa': {{percent}}% rIn",
         "completed": "ghItlhqa' rIn. jan taghqa'...",
         "success": "ghItlhqa' chu'! jan taghqa'.",
-        "loggingStarted": "De' ghItlhqa'..."
+        "loggingStarted": "De' ghItlhqa'...",
+        "downloadFirmware": "luch chu'lu' 'ej waDlaH Quv net yI'ol..."
     },
     "errors": {
         "browserCompatibility": {

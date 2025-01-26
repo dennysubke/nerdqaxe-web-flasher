@@ -1,32 +1,32 @@
 {
     "devices": [
         {
-            "name": "NerdQAxe+",
+            "name": "NerdQAxe+ (4 x BM1368)",
             "repository": "https://github.com/shufps/ESP-Miner-NerdQAxePlus",
             "file": "NerdQAxe+"
         },
         {
-            "name": "NerdQAxe++",
+            "name": "NerdQAxe++ (4 x BM1370)",
             "repository": "https://github.com/shufps/ESP-Miner-NerdQAxePlus",
             "file": "NerdQAxe++"
         },
         {
-            "name": "NerdAxe",
+            "name": "NerdAxe (1 x BM1366",
             "repository": "https://github.com/shufps/ESP-Miner-NerdQAxePlus",
             "file": "Nerdaxe"
         },
         {
-            "name": "NerdQAxe Gamma",
+            "name": "NerdAxe Gamma (1 x BM1370)",
             "repository": "https://github.com/shufps/ESP-Miner-NerdQAxePlus",
             "file": "NerdaxeGamma"
         },
         {
-            "name": "NerdOCTAXE+",
+            "name": "NerdOCTAXE+ (8 x BM1368)",
             "repository": "https://github.com/shufps/ESP-Miner-NerdQAxePlus",
             "file": "NerdOCTAXE+"
         },
         {
-            "name": "NerdOCTAXE Gamma",
+            "name": "NerdOCTAXE Gamma (8 x BM1370)",
             "repository": "https://github.com/shufps/ESP-Miner-NerdQAxePlus",
             "file": "NerdOCTAXE-Gamma"
         }

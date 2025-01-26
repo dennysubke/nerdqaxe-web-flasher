@@ -25,8 +25,7 @@
       "stopLogging": "Logging stoppen",
       "downloadLogs": "Logs herunterladen",
       "loggingDescription": "Verbinde dein Gerät, protokolliere die seriellen Daten und lade diese später herunter.",
-      "keepConfig": "Konfiguration behalten",
-      "downloadFirmware": "Firmware wird heruntergeladen und auf Integrität überprüft..."
+      "keepConfig": "Konfiguration behalten"
     },
     "features": {
       "title": "Funktionen",
@@ -66,7 +65,8 @@
       "flashing": "Flashen: {{percent}}% abgeschlossen",
       "completed": "Flashen abgeschlossen. Gerät wird neu gestartet...",
       "success": "Flashen erfolgreich abgeschlossen! Gerät wurde neu gestartet.",
-      "loggingStarted": "Serielle Protokollierung gestartet..."
+      "loggingStarted": "Serielle Protokollierung gestartet...",
+      "downloadFirmware": "Firmware wird heruntergeladen und auf Integrität überprüft..."
     },
     "errors": {
       "browserCompatibility": {

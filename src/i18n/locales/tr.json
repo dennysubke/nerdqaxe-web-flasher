@@ -25,8 +25,7 @@
       "stopLogging": "Loglamayı Durdur",
       "downloadLogs": "Logu İndir",
       "loggingDescription": "Cihazınızı seçin, işlemi loglayın ve daha sonra indirin.",
-      "keepConfig": "Yapılandırmayı koru",
-      "downloadFirmware": "Firmware indiriliyor ve bütünlüğü doğrulanıyor..."
+      "keepConfig": "Yapılandırmayı koru"
     },
     "features": {
       "title": "Öne Çıkan Özellikler",
@@ -66,7 +65,8 @@
       "flashing": "Formatlanıyor: {{percent}}% tamamlandı",
       "completed": "Formatlama tamamlandı. Cihaz baştan başlatılıyor...",
       "success": "Formatlama başarıyla tamamlandı! Cihaz baştan başlatıldı.",
-      "loggingStarted": "Loglama başlatıldı..."
+      "loggingStarted": "Loglama başlatıldı...",
+      "downloadFirmware": "Firmware indiriliyor ve bütünlüğü doğrulanıyor..."
     },
     "errors": {
       "browserCompatibility": {

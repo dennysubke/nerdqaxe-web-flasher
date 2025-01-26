@@ -25,8 +25,7 @@
       "stopLogging": "Parar Log",
       "downloadLogs": "Baixar Logs",
       "loggingDescription": "Conecte seu dispositivo, registre os dados seriais e baixe-os posteriormente.",
-      "keepConfig": "Manter configuração",
-      "downloadFirmware": "Baixando o firmware e verificando sua integridade..."
+      "keepConfig": "Manter configuração"
     },
     "features": {
       "title": "Principais Recursos",
@@ -66,7 +65,8 @@
       "flashing": "Gravando: {{percent}}% concluído",
       "completed": "Gravação concluída. Reiniciando o dispositivo...",
       "success": "Gravação concluída com sucesso! O dispositivo foi reiniciado.",
-      "loggingStarted": "Log serial iniciado..."
+      "loggingStarted": "Log serial iniciado...",
+      "downloadFirmware": "Baixando o firmware e verificando sua integridade..."
     },
     "errors": {
       "browserCompatibility": {
