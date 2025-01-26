@@ -27,7 +27,6 @@
       "loggingDescription": "Conectează aparatul, înregistrează datele de pe comunicarea serială și descarcă mai târziu.",
       "keepConfig": "Păstrează configurația",
       "downloadFirmware": "Se descarcă firmware-ul și se verifică integritatea acestuia..."
-
     },
     "features": {
       "title": "Funcții importante",
