@@ -350,10 +350,11 @@ export default function LandingHero() {
       setStatus(t('status.downloadFirmware'));
 
       // hard-coded, let's see how it goes :see-no-evil:
-      // We added a SHA-256 hash verification step to compare the hash of
-      // the downloaded binary with the (hidden) hashes listed on the GitHub
-      // release page for each factory file. This ensures that the proxy is not 
-      // acting as a "man-in-the-middle" and addresses potential security concerns.
+      // We added a SHA-256 hash verification step to validate the integrity of
+      // the downloaded binary. This step compares its hash against the (hidden)
+      // hashes provided on the GitHub release page for each factory file.
+      // This ensures that the proxy is not acting as a "man-in-the-middle" by
+      // tampering with the files and mitigates potential security risks.
       const proxyUrl = 'https://corsproxy.io/?url=';
       const firmwareResponse = await fetch(proxyUrl + firmwareUrl);
       if (!firmwareResponse.ok) {
