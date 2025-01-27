@@ -303,7 +303,7 @@ export default function LandingHero() {
     }
 
     setIsFlashing(true)
-
+    setStatus(t('status.preparing'));
 
     try {
       // Stop logging if it's active
@@ -315,7 +315,6 @@ export default function LandingHero() {
       if (serialPortRef.current.readable) {
         await serialPortRef.current.close();
       }
-      setStatus(t('status.preparing'));
 
       // Create transport and ESPLoader for flashing
       const transport = new Transport(serialPortRef.current);
@@ -341,6 +340,7 @@ export default function LandingHero() {
       const binaryName = decodeURIComponent(firmwareUrl.split('/').pop()); // Extract the binary name
       const sha256Hash = await fetchSHA256Hash(device.repository, selectedFirmware, binaryName);
 
+      // the first release providing hashes is the 1.0.24 firmware
       if (sha256Hash) {
         console.log(`found sha256 hash: ${sha256Hash}`);
       } else {
@@ -350,6 +350,10 @@ export default function LandingHero() {
       setStatus(t('status.downloadFirmware'));
 
       // hard-coded, let's see how it goes :see-no-evil:
+      // We added a SHA-256 hash verification step to compare the hash of
+      // the downloaded binary with the (hidden) hashes listed on the GitHub
+      // release page for each factory file. This ensures that the proxy is not 
+      // acting as a "man-in-the-middle" and addresses potential security concerns.
       const proxyUrl = 'https://corsproxy.io/?url=';
       const firmwareResponse = await fetch(proxyUrl + firmwareUrl);
       if (!firmwareResponse.ok) {
@@ -370,6 +374,8 @@ export default function LandingHero() {
           throw new Error('Hash verification failed');
         }
       } else {
+        // version 1.0.23 and earlier don't have hashes on the release page
+        // in this case we warn silently in the console but accept the risk
         console.warn("no SHA256 found on the release page!");
       }
 
@@ -381,6 +387,7 @@ export default function LandingHero() {
       setStatus(t('status.flashing', { percent: 0 }));
 
       // On all Nerd*axe derivatives the same
+      // address and length is from the partitions.csv
       const nvsStart = 0x9000;
       const nvsSize = 0x6000;
 
