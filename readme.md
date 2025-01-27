@@ -20,7 +20,7 @@ docker build . -f Dockerfile -t nerdqaxe-web-flasher
 docker run --rm -d -p 3000:3000 nerdqaxe-web-flasher
 
 # run the container in foregroud with code-reload on file changes
-docker run --rm -it -p 3001:3000 -v $(pwd):/app nerdqaxe-web-flasher
+docker run --rm -it -p 3000:3000 -v $(pwd):/app nerdqaxe-web-flasher
 ```
 
 and access it by `http://localhost:3000`
