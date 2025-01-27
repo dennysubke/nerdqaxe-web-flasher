@@ -14,10 +14,10 @@ You can use Docker for compiling the application and to run it locally by
 
 ```bash
 # build the image
-docker build . -f Dockerfile -t bitaxe-web-flasher
+docker build . -f Dockerfile -t nerdqaxe-web-flasher
 
 # run the container
-docker run --rm -d -p 3000:3000 bitaxe-web-flasher
+docker run --rm -d -p 3000:3000 nerdqaxe-web-flasher
 ```
 
 and access it by `http://localhost:3000`

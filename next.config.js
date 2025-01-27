@@ -3,8 +3,8 @@ const nextConfig = {
   reactStrictMode: true,
   output: 'export',
   ...(process.env.NODE_ENV === 'production' ? {
-    basePath: '/bitaxe-web-flasher',
-    assetPrefix: '/bitaxe-web-flasher',
+    basePath: '/nerdqaxe-web-flasher',
+    assetPrefix: '/nerdqaxe-web-flasher',
   } : {}),
   images: {
     unoptimized: true,

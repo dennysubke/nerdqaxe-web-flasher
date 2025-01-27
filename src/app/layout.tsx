@@ -6,7 +6,7 @@ import { I18nProvider } from '../components/I18nProvider'
 
 const inter = Inter({ subsets: ['latin'] })
 
-const basePath = process.env.NODE_ENV === 'production' ? '/bitaxe-web-flasher' : ''
+const basePath = process.env.NODE_ENV === 'production' ? '/nerdqaxe-web-flasher' : ''
 
 export const metadata: Metadata = {
   title: 'Nerd*axe Web Flasher',
