@@ -16,10 +16,10 @@ You can use Docker for compiling the application and to run it locally by
 # build the image
 docker build . -f Dockerfile -t nerdqaxe-web-flasher
 
-# run the container in background without code-reload
+# run the container in background without hot reload
 docker run --rm -d -p 3000:3000 nerdqaxe-web-flasher
 
-# run the container in foregroud with code-reload on file changes
+# run the container in foregroud with hot reload on file changes
 docker run --rm -it -p 3000:3000 -v $(pwd):/app nerdqaxe-web-flasher
 ```
 
