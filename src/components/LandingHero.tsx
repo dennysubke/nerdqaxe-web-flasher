@@ -380,7 +380,7 @@ export default function LandingHero() {
 
       setStatus(t('status.flashing', { percent: 0 }));
 
-      // On all Bitaxe derivatives the same
+      // On all Nerd*axe derivatives the same
       const nvsStart = 0x9000;
       const nvsSize = 0x6000;
 
