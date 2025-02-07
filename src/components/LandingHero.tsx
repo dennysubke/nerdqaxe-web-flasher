@@ -33,6 +33,7 @@ export default function LandingHero() {
   const readableStreamClosedRef = useRef<Promise<void> | null>(null)
   const logsRef = useRef<string>('')
   const [keepConfig, setKeepConfig] = useState(true);
+  const [showPreReleases, setShowPreReleases] = useState(false);
 
   useEffect(() => {
     const userAgent = navigator.userAgent.toLowerCase();
@@ -120,14 +121,18 @@ export default function LandingHero() {
     }
   };
 
-  // Fetch filtered releases from GitHub
+  // Fetch filtered releases from GitHub.
+  // If showPreReleases is true, we only filter out drafts.
   const fetchReleases = async (repositoryUrl: string, selectedDevice: string) => {
     try {
       const { owner, repo } = parseGitHubRepo(repositoryUrl);
       const apiUrl = `https://api.github.com/repos/${owner}/${repo}/releases`;
       const releases = await fetchGitHubAPI(apiUrl);
 
-      const filteredReleases = releases.filter((release: any) => !release.prerelease && !release.draft);
+      const filteredReleases = showPreReleases
+        ? releases.filter((release: any) => !release.draft)
+        : releases.filter((release: any) => !release.prerelease && !release.draft);
+
       return filteredReleases.map((release: any) => ({
         version: release.tag_name,
         name: release.name,
@@ -141,6 +146,7 @@ export default function LandingHero() {
     }
   };
 
+  // Update firmware options whenever the selected device or showPreReleases changes
   useEffect(() => {
     const updateFirmwareOptions = async () => {
       if (!selectedDevice) {
@@ -156,7 +162,7 @@ export default function LandingHero() {
     };
 
     updateFirmwareOptions();
-  }, [selectedDevice]);
+  }, [selectedDevice, showPreReleases]);
 
   const handleConnect = async () => {
     setIsConnecting(true)
@@ -202,6 +208,11 @@ export default function LandingHero() {
 
   const handleKeepConfigToggle = (event: React.ChangeEvent<HTMLInputElement>) => {
     setKeepConfig(event.target.checked);
+  };
+
+  // New handler for toggling "Show Pre-Releases"
+  const handleShowPreReleasesToggle = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setShowPreReleases(event.target.checked);
   };
 
   const startSerialLogging = async () => {
@@ -340,7 +351,6 @@ export default function LandingHero() {
       const binaryName = decodeURIComponent(firmwareUrl.split('/').pop()); // Extract the binary name
       const sha256Hash = await fetchSHA256Hash(device.repository, selectedFirmware, binaryName);
 
-      // the first release providing hashes is the 1.0.24 firmware
       if (sha256Hash) {
         console.log(`found sha256 hash: ${sha256Hash}`);
       } else {
@@ -423,7 +433,7 @@ export default function LandingHero() {
         compress: true,
         reportProgress: (fileIndex, written, total) => {
           const percent = Math.round((written / total) * 100)
-          if (percent == 100) {
+          if (percent === 100) {
             setStatus(t('status.completed'))
           } else {
             setStatus(t('status.flashing', { percent: percent }))
@@ -493,17 +503,31 @@ export default function LandingHero() {
                   disabled={isConnecting || isFlashing}
                 />
               )}
-              <div className="flex items-center gap-2">
-                <input
-                  type="checkbox"
-                  id="keepConfig"
-                  className="cursor-pointer"
-                  checked={keepConfig}
-                  onChange={handleKeepConfigToggle}
-                />
-                <label htmlFor="keepConfig" className="text-gray-500 dark:text-gray-400 cursor-pointer">
-                  {t('hero.keepConfig')}
-                </label>
+              <div className="flex items-center justify-between">
+                <div>
+                  <input
+                    type="checkbox"
+                    id="keepConfig"
+                    className="cursor-pointer"
+                    checked={keepConfig}
+                    onChange={handleKeepConfigToggle}
+                  />&nbsp;
+                  <label htmlFor="keepConfig" className="text-gray-500 dark:text-gray-400 cursor-pointer">
+                    {t('hero.keepConfig')}
+                  </label>
+                </div>
+                <div>
+                  <input
+                    type="checkbox"
+                    id="showPreReleases"
+                    className="cursor-pointer"
+                    checked={showPreReleases}
+                    onChange={handleShowPreReleasesToggle}
+                  />&nbsp;
+                  <label htmlFor="showPreReleases" className="text-gray-500 dark:text-gray-400 cursor-pointer">
+                    Show Pre-Releases
+                  </label>
+                </div>
               </div>
               <Button
                 className="w-full"
