@@ -1,4 +1,10 @@
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue
+} from "@/components/ui/select"
 
 type SelectorProps = {
   onValueChange: (value: string) => void;
@@ -13,7 +19,7 @@ export default function BoardVersionSelector({ onValueChange, disabled, placehol
       <SelectTrigger>
         <SelectValue placeholder={placeholder} />
       </SelectTrigger>
-      <SelectContent>
+      <SelectContent className="overflow-y-auto max-h-[20rem]">
         {values.map((value) => (
           <SelectItem key={value} value={value}>
             {value}
