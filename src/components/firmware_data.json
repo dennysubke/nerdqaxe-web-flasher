@@ -29,6 +29,11 @@
             "name": "NerdOCTAXE Gamma (8 x BM1370)",
             "repository": "https://github.com/shufps/ESP-Miner-NerdQAxePlus",
             "file": "NerdOCTAXE-Gamma"
+        },
+        {
+            "name": "NerdHaxe Gamma (6 x BM1370)",
+            "repository": "https://github.com/shufps/ESP-Miner-NerdQAxePlus",
+            "file": "NerdHaxe-Gamma"
         }
     ]
 }
