@@ -137,7 +137,9 @@ export default function LandingHero() {
         version: release.tag_name,
         name: release.name,
         assets: release.assets.filter((asset: any) =>
-          asset.name.startsWith(`esp-miner-factory-${selectedDevice}-${release.tag_name}`),
+          asset.name.toLowerCase().startsWith(
+            `esp-miner-factory-${selectedDevice.toLowerCase()}-${release.tag_name}`.toLowerCase()
+          ),
         ),
       })).filter((release: any) => release.assets.length > 0);
     } catch (error) {
